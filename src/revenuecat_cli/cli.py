@@ -1,10 +1,9 @@
-import typer
-from .v1 import customers, entitlements, extensions
+from enum import Enum
 
-# Constants
-API_KEY_HELP = "Your RevenueCat API key"
-USER_ID_HELP = "The App User ID of the Customer. Use single quotes to pass in it due to special characters like $."
-ENVIRONMENT_HELP = "The environment to use. Possible values are 'production' and 'sandbox'. Defaults to production."
+import typer
+from typing_extensions import Annotated
+
+from .v1 import customers, entitlements, extensions
 
 app = typer.Typer(help="RevenueCat CLI")
 
@@ -18,13 +17,35 @@ entitlements_app = typer.Typer(help="Manage entitlements")
 v1_app.add_typer(entitlements_app, name="entitlements")
 
 
+class Environment(str, Enum):
+    production = "production"
+    sandbox = "sandbox"
+
+
+OptApiKey = Annotated[
+    str, typer.Option(envvar="REVENUECAT_API_KEY", help="Your RevenueCat API key")
+]
+OptUserId = Annotated[
+    str,
+    typer.Option(
+        envvar="REVENUECAT_USER_ID",
+        help="The App User ID of the Customer. Wrap in single quotes to ensure all characters such as $ are not dropped.",
+    ),
+]
+OptEnvironment = Annotated[
+    Environment,
+    typer.Option(
+        envvar="REVENUECAT_ENVIRONMENT",
+        help="The environment to use.",
+    ),
+]
+
+
 @customers_app.command("get")
 def get_customer(
-    api_key: str = typer.Option(..., "--api-key", help=API_KEY_HELP),
-    user_id: str = typer.Option(..., "--user-id", help=USER_ID_HELP),
-    environment: str = typer.Option(
-        "production", "--environment", help=ENVIRONMENT_HELP
-    ),
+    api_key: OptApiKey,
+    user_id: OptUserId,
+    environment: OptEnvironment = Environment.production,
 ):
     """
     Gets the latest Customer Info for the customer with the given App User ID, or creates a new customer if it doesn't exist.
@@ -42,11 +63,9 @@ def get_customer(
 
 @customers_app.command("delete")
 def delete_customer(
-    api_key: str = typer.Option(..., "--api-key", help=API_KEY_HELP),
-    user_id: str = typer.Option(..., "--user-id", help=USER_ID_HELP),
-    environment: str = typer.Option(
-        "production", "--environment", help=ENVIRONMENT_HELP
-    ),
+    api_key: OptApiKey,
+    user_id: OptUserId,
+    environment: OptEnvironment = Environment.production,
 ):
     """
     Deletes a Customer.
@@ -63,8 +82,9 @@ def delete_customer(
 
 @entitlements_app.command("grant")
 def grant_entitlement(
-    api_key: str = typer.Option(..., "--api-key", help=API_KEY_HELP),
-    user_id: str = typer.Option(..., "--user-id", help=USER_ID_HELP),
+    api_key: OptApiKey,
+    user_id: OptUserId,
+    environment: OptEnvironment = Environment.production,
     entitlement_id: str = typer.Option(
         ...,
         "--entitlement-id",
@@ -74,9 +94,6 @@ def grant_entitlement(
         None,
         "--end-time-ms",
         help="The end time of the entitlement in milliseconds since epoch. If not provided, the entitlement will be granted for lifetime.",
-    ),
-    environment: str = typer.Option(
-        "production", "--environment", help=ENVIRONMENT_HELP
     ),
 ):
     """
@@ -96,15 +113,13 @@ def grant_entitlement(
 
 @entitlements_app.command("revoke")
 def revoke_entitlement(
-    api_key: str = typer.Option(..., "--api-key", help=API_KEY_HELP),
-    user_id: str = typer.Option(..., "--user-id", help=USER_ID_HELP),
+    api_key: OptApiKey,
+    user_id: OptUserId,
+    environment: OptEnvironment = Environment.production,
     entitlement_id: str = typer.Option(
         ...,
         "--entitlement-id",
         help="The identifier for the entitlement you want to revoke from the Customer",
-    ),
-    environment: str = typer.Option(
-        "production", "--environment", help=ENVIRONMENT_HELP
     ),
 ):
     """
@@ -123,7 +138,8 @@ def revoke_entitlement(
 
 @entitlements_app.command("grant_from_export")
 def grant_entitlement_from_export(
-    api_key: str = typer.Option(..., "--api-key", help=API_KEY_HELP),
+    api_key: OptApiKey,
+    environment: OptEnvironment = Environment.production,
     file_path: str = typer.Option(
         ..., "--file-path", help="The path to the CSV file containing the customer data"
     ),
@@ -141,9 +157,6 @@ def grant_entitlement_from_export(
         "app_user_id",
         "--user-id-field",
         help="The field in the CSV file that contains the user ID",
-    ),
-    environment: str = typer.Option(
-        "production", "--environment", help=ENVIRONMENT_HELP
     ),
     seconds_per_request: int = typer.Option(
         1,
