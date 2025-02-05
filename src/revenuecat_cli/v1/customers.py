@@ -1,6 +1,7 @@
 import requests
 from ..common import API_ENDPOINTS, get_headers, handle_response
 
+
 def get(
     api_key: str,
     user_id: str,
@@ -15,6 +16,7 @@ def get(
     response = requests.get(url, headers=get_headers(api_key))
 
     return handle_response(response, [200, 201], ["subscriber"])
+
 
 def delete(
     api_key: str,
