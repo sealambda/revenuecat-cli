@@ -1,12 +1,14 @@
 import csv
-from . import customers, entitlements
-from datetime import datetime
 import time
+from datetime import datetime
+from os import PathLike
+
+from . import customers, entitlements
 
 
 def grant_entitlement_from_export(
     api_key: str,
-    file_path: str,
+    file_path: PathLike,
     entitlement_id: str,
     end_time_ms: int | None = None,
     user_id_field: str = "app_user_id",

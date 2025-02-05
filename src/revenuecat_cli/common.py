@@ -1,15 +1,23 @@
-import requests
+from enum import Enum
 from typing import Dict
+
+import requests
+
+
+class Environment(str, Enum):
+    production = "production"
+    sandbox = "sandbox"
+
 
 # 🔗 API Endpoints
 API_ENDPOINTS = {
     "v1": {
-        "production": "https://api.revenuecat.com/v1",
-        "sandbox": "https://api-staging.revenuecat.com/v1",
+        Environment.production: "https://api.revenuecat.com/v1",
+        Environment.sandbox: "https://api-staging.revenuecat.com/v1",
     },
     "v2": {
-        "production": "https://api.revenuecat.com/v2",
-        "sandbox": "https://api-staging.revenuecat.com/v2",
+        Environment.production: "https://api.revenuecat.com/v2",
+        Environment.sandbox: "https://api-staging.revenuecat.com/v2",
     },
 }
 
