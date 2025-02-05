@@ -1,8 +1,9 @@
-from enum import Enum
+from pathlib import Path
 
 import typer
-from typing_extensions import Annotated
+from typing_extensions import Annotated, Optional
 
+from .common import Environment
 from .v1 import customers, entitlements, extensions
 
 app = typer.Typer(help="RevenueCat CLI")
@@ -15,11 +16,6 @@ v1_app.add_typer(customers_app, name="customers")
 
 entitlements_app = typer.Typer(help="Manage entitlements")
 v1_app.add_typer(entitlements_app, name="entitlements")
-
-
-class Environment(str, Enum):
-    production = "production"
-    sandbox = "sandbox"
 
 
 OptApiKey = Annotated[
@@ -37,6 +33,20 @@ OptEnvironment = Annotated[
     typer.Option(
         envvar="REVENUECAT_ENVIRONMENT",
         help="The environment to use.",
+    ),
+]
+
+# TODO(giorgio): I think there are a few issues with the current approach:
+#   * The default is None, so forgetting the parameter means granting the entitlement indefinitely
+#   * Passing ms is annoying, typer offers DateTime: https://typer.tiangolo.com/tutorial/parameter-types/datetime/
+#   * `duration` is anyway deprecated in the API... so maybe we shouldn't even allow it?
+#     https://www.revenuecat.com/docs/api-v1#tag/entitlements
+#   My proposal is to force the user to provide EITHER `end_duration_ms` or `duration` (and optionally `start_time_ms`)
+#   In alternative to `end_duration_ms`, we can provide a nicer `end_duration` to pass as a DateTime object.
+OptEndTimeMs = Annotated[
+    Optional[int],
+    typer.Option(
+        help="The end time of the entitlement in milliseconds since epoch. If not provided, the entitlement will be granted for lifetime."
     ),
 ]
 
@@ -84,17 +94,14 @@ def delete_customer(
 def grant_entitlement(
     api_key: OptApiKey,
     user_id: OptUserId,
+    entitlement_id: Annotated[
+        str,
+        typer.Option(
+            help="The identifier for the entitlement you want to grant to the Customer",
+        ),
+    ],
+    end_time_ms: OptEndTimeMs = None,
     environment: OptEnvironment = Environment.production,
-    entitlement_id: str = typer.Option(
-        ...,
-        "--entitlement-id",
-        help="The identifier for the entitlement you want to grant to the Customer",
-    ),
-    end_time_ms: int | None = typer.Option(
-        None,
-        "--end-time-ms",
-        help="The end time of the entitlement in milliseconds since epoch. If not provided, the entitlement will be granted for lifetime.",
-    ),
 ):
     """
     Grants a Customer an entitlement. Does not override or defer a store transaction, applied simultaneously.
@@ -115,12 +122,13 @@ def grant_entitlement(
 def revoke_entitlement(
     api_key: OptApiKey,
     user_id: OptUserId,
+    entitlement_id: Annotated[
+        str,
+        typer.Option(
+            help="The identifier for the entitlement you want to revoke from the Customer",
+        ),
+    ],
     environment: OptEnvironment = Environment.production,
-    entitlement_id: str = typer.Option(
-        ...,
-        "--entitlement-id",
-        help="The identifier for the entitlement you want to revoke from the Customer",
-    ),
 ):
     """
     Revokes a Customer's entitlement.
@@ -136,33 +144,26 @@ def revoke_entitlement(
     typer.echo(response)
 
 
-@entitlements_app.command("grant_from_export")
+@entitlements_app.command("grant-from-export")
 def grant_entitlement_from_export(
     api_key: OptApiKey,
+    file_path: Annotated[
+        Path, typer.Option(help="The path to the CSV file containing the customer data")
+    ],
+    entitlement_id: Annotated[
+        str,
+        typer.Option(
+            help="The identifier for the entitlement you want to grant to the Customer",
+        ),
+    ],
+    end_time_ms: OptEndTimeMs = None,
+    user_id_field: Annotated[
+        str, typer.Option(help="The field in the CSV file that contains the user ID")
+    ] = "app_user_id",
     environment: OptEnvironment = Environment.production,
-    file_path: str = typer.Option(
-        ..., "--file-path", help="The path to the CSV file containing the customer data"
-    ),
-    entitlement_id: str = typer.Option(
-        ...,
-        "--entitlement-id",
-        help="The identifier for the entitlement you want to grant to the Customer",
-    ),
-    end_time_ms: int | None = typer.Option(
-        None,
-        "--end-time-ms",
-        help="The end time of the entitlement in milliseconds since epoch. If not provided, the entitlement will be granted for lifetime.",
-    ),
-    user_id_field: str = typer.Option(
-        "app_user_id",
-        "--user-id-field",
-        help="The field in the CSV file that contains the user ID",
-    ),
-    seconds_per_request: int = typer.Option(
-        1,
-        "--seconds-per-request",
-        help="The number of seconds to wait between requests. Defaults to 1.",
-    ),
+    seconds_per_request: Annotated[
+        int, typer.Option(help="The number of seconds to wait between requests.")
+    ] = 1,
 ):
     """
     Grants entitlements to customers from a CSV file.
