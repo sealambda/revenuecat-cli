@@ -1,6 +1,6 @@
 import typer
 from .v1 import customers, entitlements, extensions
-from typing import Tuple
+
 # Constants
 API_KEY_HELP = "Your RevenueCat API key"
 USER_ID_HELP = "The App User ID of the Customer. Use single quotes to pass in it due to special characters like $."
