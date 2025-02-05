@@ -2,13 +2,34 @@
 name = "revenuecat-cli"
 version = "0.1.0"
 description = "Unofficial RevenueCat CLI for Python"
+keywords = ["revenuecat", "cli"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Utilities",
+]
 authors = [{ name = "Sealambda", email = "hello@sealambda.com" }]
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.9"
 dependencies = [
     "requests>=2.32.3",
     "typer>=0.15.1",
 ]
+
+# https://packaging.python.org/en/latest/specifications/well-known-project-urls/#well-known-labels
+[project.urls]
+source = "https://github.com/sealambda/revenuecat-cli"
+issues = "https://github.com/sealambda/revenuecat-cli/issues"
 
 [project.scripts]
 revenuecat-cli = "revenuecat_cli.cli:app"
