@@ -1,9 +1,10 @@
 from pathlib import Path
+from datetime import datetime
 
-from typer import echo, Option, Typer
+from typer import BadParameter, Option, Typer
 from typing_extensions import Annotated, Optional
 
-from .common import Environment
+from .common import Duration, Environment
 from .v1 import customers, entitlements, extensions
 
 app = Typer(help="RevenueCat CLI")
@@ -36,18 +37,24 @@ OptEnvironment = Annotated[
     ),
 ]
 
-# TODO(giorgio): I think there are a few issues with the current approach:
-#   * The default is None, so forgetting the parameter means granting the entitlement indefinitely
-#   * Passing ms is annoying, typer offers DateTime: https://typer.tiangolo.com/tutorial/parameter-types/datetime/
-#   * `duration` is anyway deprecated in the API... so maybe we shouldn't even allow it?
-#     https://www.revenuecat.com/docs/api-v1#tag/entitlements
-#   My proposal is to force the user to provide EITHER `end_duration_ms` or `duration` (and optionally `start_time_ms`)
-#   In alternative to `end_duration_ms`, we can provide a nicer `end_duration` to pass as a DateTime object.
-OptEndTimeMs = Annotated[
-    Optional[int],
+OptEndTime = Annotated[
+    Optional[datetime],
+    Option(help="When the entitlement should expire (e.g. '2024-12-31T23:59:59')."),
+]
+OptDuration = Annotated[
+    Optional[Duration],
     Option(
-        help="The end time of the entitlement in milliseconds since epoch. If not provided, the entitlement will be granted for lifetime."
+        help="The duration of the entitlement.",
     ),
+]
+OptStartTime = Annotated[
+    Optional[datetime],
+    Option(help="When the entitlement should start (defaults to now)."),
+]
+
+OptEntitlementId = Annotated[
+    str,
+    Option(help="The identifier for the entitlement you want to grant to the Customer"),
 ]
 
 
@@ -60,7 +67,7 @@ def get_customer(
     """
     Gets the latest Customer Info for the customer with the given App User ID, or creates a new customer if it doesn't exist.
     """
-    echo("Starting customer retrieval process...")
+    print("Starting customer retrieval process...")
 
     response = customers.get(
         api_key,
@@ -68,7 +75,7 @@ def get_customer(
         environment,
     )
 
-    echo(response)
+    print(response)
 
 
 @customers_app.command("delete")
@@ -80,42 +87,44 @@ def delete_customer(
     """
     Deletes a Customer.
     """
-    echo("Starting customer deletion process...")
+    print("Starting customer deletion process...")
 
     response = customers.delete(
         api_key,
         user_id,
         environment,
     )
-    echo(response)
+    print(response)
 
 
 @entitlements_app.command("grant")
 def grant_entitlement(
     api_key: OptApiKey,
     user_id: OptUserId,
-    entitlement_id: Annotated[
-        str,
-        Option(
-            help="The identifier for the entitlement you want to grant to the Customer",
-        ),
-    ],
-    end_time_ms: OptEndTimeMs = None,
+    entitlement_id: OptEntitlementId,
+    end_time: OptEndTime = None,
+    duration: OptDuration = None,
+    start_time: OptStartTime = None,
     environment: OptEnvironment = Environment.production,
 ):
     """
     Grants a Customer an entitlement. Does not override or defer a store transaction, applied simultaneously.
     """
-    echo("Starting entitlement granting process...")
+    if not end_time and not duration:
+        raise BadParameter("Either end_time or duration must be provided")
+
+    print("Starting entitlement granting process...")
 
     response = entitlements.grant(
         api_key,
         user_id,
         entitlement_id,
-        end_time_ms,
+        end_time,
+        duration,
+        start_time,
         environment,
     )
-    echo(response)
+    print(response)
 
 
 @entitlements_app.command("revoke")
@@ -133,7 +142,7 @@ def revoke_entitlement(
     """
     Revokes a Customer's entitlement.
     """
-    echo("Starting entitlement revoking process...")
+    print("Starting entitlement revoking process...")
 
     response = entitlements.revoke(
         api_key,
@@ -141,7 +150,7 @@ def revoke_entitlement(
         entitlement_id,
         environment,
     )
-    echo(response)
+    print(response)
 
 
 @entitlements_app.command("grant-from-export")
@@ -150,13 +159,10 @@ def grant_entitlement_from_export(
     file_path: Annotated[
         Path, Option(help="The path to the CSV file containing the customer data")
     ],
-    entitlement_id: Annotated[
-        str,
-        Option(
-            help="The identifier for the entitlement you want to grant to the Customer",
-        ),
-    ],
-    end_time_ms: OptEndTimeMs = None,
+    entitlement_id: OptEntitlementId,
+    end_time: OptEndTime = None,
+    duration: OptDuration = None,
+    start_time: OptStartTime = None,
     user_id_field: Annotated[
         str, Option(help="The field in the CSV file that contains the user ID")
     ] = "app_user_id",
@@ -168,18 +174,23 @@ def grant_entitlement_from_export(
     """
     Grants entitlements to customers from a CSV file.
     """
-    echo("Starting entitlement granting process...")
+    if not end_time and not duration:
+        raise BadParameter("Either end_time or duration must be provided")
+
+    print("Starting entitlement granting process...")
 
     response = extensions.grant_entitlement_from_export(
         api_key,
         file_path,
         entitlement_id,
-        end_time_ms,
+        end_time,
+        duration,
+        start_time,
         user_id_field,
         environment,
         seconds_per_request,
     )
-    echo(response)
+    print(response)
 
 
 if __name__ == "__main__":
