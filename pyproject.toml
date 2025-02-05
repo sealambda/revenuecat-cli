@@ -2,9 +2,9 @@
 name = "revenuecat-cli"
 version = "0.1.0"
 description = "Unofficial RevenueCat CLI for Python"
-authors = [{ name="Sealambda", email="hello@sealambda.com" }]
+authors = [{ name = "Sealambda", email = "hello@sealambda.com" }]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.9"
 dependencies = [
     "requests>=2.32.3",
     "typer>=0.15.1",
