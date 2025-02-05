@@ -22,16 +22,23 @@ def get_headers(
     }
 
 def handle_response(
-    response: requests.Response, 
+    response: requests.Response,
     success_status_codes: list[int],
+    fields: list[str] = None,
     show_output: bool = False
-) -> str | None:
+) -> dict:
     response_json = response.json()
     
     if show_output:
         print(response_json)
 
     if response.status_code not in success_status_codes:
-        return f"Error: {response_json}"
+        print(f"Error: {response_json}")
+
+    if not fields:
+        return response_json
     
-    return None
+    if len(fields) == 1:
+        return response_json[fields[0]]
+    
+    return {field: response_json[field] for field in fields}

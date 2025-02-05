@@ -11,7 +11,7 @@ pip install revenuecat-cli
 ## Usage
 
 ```bash
-revenuecat-cli v1 entitlements grant --api-key <api-key> --app-user-id <app-user-id> --entitlement-id <entitlement-id>
+revenuecat-cli v1 entitlements grant --api-key <api-key> --user-id <user-id> --entitlement-id <entitlement-id>
 ```
 
 ## License
