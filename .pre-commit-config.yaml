@@ -1,0 +1,16 @@
+# https://docs.astral.sh/uv/guides/integration/pre-commit/
+repos:
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.5.28
+    hooks:
+      # Update uv.lock
+      - id: uv-lock    
+      # Export requirements.txt
+      - id: uv-export  
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.4
+    hooks:
+      # Run the linter.
+      - id: ruff
+      # Run the formatter.
+      - id: ruff-format
