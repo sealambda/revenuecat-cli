@@ -17,11 +17,14 @@ v1_app.add_typer(customers_app, name="customers")
 entitlements_app = typer.Typer(help="Manage entitlements")
 v1_app.add_typer(entitlements_app, name="entitlements")
 
+
 @customers_app.command("get")
 def get_customer(
     api_key: str = typer.Option(..., "--api-key", help=API_KEY_HELP),
     user_id: str = typer.Option(..., "--user-id", help=USER_ID_HELP),
-    environment: str = typer.Option("production", "--environment", help=ENVIRONMENT_HELP),
+    environment: str = typer.Option(
+        "production", "--environment", help=ENVIRONMENT_HELP
+    ),
 ):
     """
     Gets the latest Customer Info for the customer with the given App User ID, or creates a new customer if it doesn't exist.
@@ -36,11 +39,14 @@ def get_customer(
 
     typer.echo(response)
 
+
 @customers_app.command("delete")
 def delete_customer(
     api_key: str = typer.Option(..., "--api-key", help=API_KEY_HELP),
     user_id: str = typer.Option(..., "--user-id", help=USER_ID_HELP),
-    environment: str = typer.Option("production", "--environment", help=ENVIRONMENT_HELP),
+    environment: str = typer.Option(
+        "production", "--environment", help=ENVIRONMENT_HELP
+    ),
 ):
     """
     Deletes a Customer.
@@ -54,19 +60,30 @@ def delete_customer(
     )
     typer.echo(response)
 
+
 @entitlements_app.command("grant")
 def grant_entitlement(
     api_key: str = typer.Option(..., "--api-key", help=API_KEY_HELP),
     user_id: str = typer.Option(..., "--user-id", help=USER_ID_HELP),
-    entitlement_id: str = typer.Option(..., "--entitlement-id", help="The identifier for the entitlement you want to grant to the Customer"),
-    end_time_ms: int | None = typer.Option(None, "--end-time-ms", help="The end time of the entitlement in milliseconds since epoch. If not provided, the entitlement will be granted for lifetime."),
-    environment: str = typer.Option("production", "--environment", help=ENVIRONMENT_HELP),
+    entitlement_id: str = typer.Option(
+        ...,
+        "--entitlement-id",
+        help="The identifier for the entitlement you want to grant to the Customer",
+    ),
+    end_time_ms: int | None = typer.Option(
+        None,
+        "--end-time-ms",
+        help="The end time of the entitlement in milliseconds since epoch. If not provided, the entitlement will be granted for lifetime.",
+    ),
+    environment: str = typer.Option(
+        "production", "--environment", help=ENVIRONMENT_HELP
+    ),
 ):
     """
     Grants a Customer an entitlement. Does not override or defer a store transaction, applied simultaneously.
     """
     typer.echo("Starting entitlement granting process...")
-    
+
     response = entitlements.grant(
         api_key,
         user_id,
@@ -76,12 +93,19 @@ def grant_entitlement(
     )
     typer.echo(response)
 
+
 @entitlements_app.command("revoke")
 def revoke_entitlement(
     api_key: str = typer.Option(..., "--api-key", help=API_KEY_HELP),
     user_id: str = typer.Option(..., "--user-id", help=USER_ID_HELP),
-    entitlement_id: str = typer.Option(..., "--entitlement-id", help="The identifier for the entitlement you want to revoke from the Customer"),    
-    environment: str = typer.Option("production", "--environment", help=ENVIRONMENT_HELP),
+    entitlement_id: str = typer.Option(
+        ...,
+        "--entitlement-id",
+        help="The identifier for the entitlement you want to revoke from the Customer",
+    ),
+    environment: str = typer.Option(
+        "production", "--environment", help=ENVIRONMENT_HELP
+    ),
 ):
     """
     Revokes a Customer's entitlement.
@@ -96,15 +120,36 @@ def revoke_entitlement(
     )
     typer.echo(response)
 
+
 @entitlements_app.command("grant_from_export")
 def grant_entitlement_from_export(
     api_key: str = typer.Option(..., "--api-key", help=API_KEY_HELP),
-    file_path: str = typer.Option(..., "--file-path", help="The path to the CSV file containing the customer data"),
-    entitlement_id: str = typer.Option(..., "--entitlement-id", help="The identifier for the entitlement you want to grant to the Customer"),
-    end_time_ms: int | None = typer.Option(None, "--end-time-ms", help="The end time of the entitlement in milliseconds since epoch. If not provided, the entitlement will be granted for lifetime."),
-    user_id_field: str = typer.Option("app_user_id", "--user-id-field", help="The field in the CSV file that contains the user ID"),
-    environment: str = typer.Option("production", "--environment", help=ENVIRONMENT_HELP),
-    seconds_per_request: int = typer.Option(1, "--seconds-per-request", help="The number of seconds to wait between requests. Defaults to 1."),
+    file_path: str = typer.Option(
+        ..., "--file-path", help="The path to the CSV file containing the customer data"
+    ),
+    entitlement_id: str = typer.Option(
+        ...,
+        "--entitlement-id",
+        help="The identifier for the entitlement you want to grant to the Customer",
+    ),
+    end_time_ms: int | None = typer.Option(
+        None,
+        "--end-time-ms",
+        help="The end time of the entitlement in milliseconds since epoch. If not provided, the entitlement will be granted for lifetime.",
+    ),
+    user_id_field: str = typer.Option(
+        "app_user_id",
+        "--user-id-field",
+        help="The field in the CSV file that contains the user ID",
+    ),
+    environment: str = typer.Option(
+        "production", "--environment", help=ENVIRONMENT_HELP
+    ),
+    seconds_per_request: int = typer.Option(
+        1,
+        "--seconds-per-request",
+        help="The number of seconds to wait between requests. Defaults to 1.",
+    ),
 ):
     """
     Grants entitlements to customers from a CSV file.

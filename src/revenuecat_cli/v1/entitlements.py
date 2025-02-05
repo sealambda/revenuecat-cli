@@ -1,6 +1,7 @@
 import requests
 from ..common import API_ENDPOINTS, get_headers, handle_response
 
+
 def grant(
     api_key: str,
     user_id: str,
@@ -22,6 +23,7 @@ def grant(
     response = requests.post(url, json=data, headers=get_headers(api_key))
 
     return handle_response(response, [201], ["subscriber"])
+
 
 def revoke(
     api_key: str,
