@@ -4,6 +4,7 @@ from datetime import datetime
 from os import PathLike
 from typer import progressbar
 
+from ..common import Duration, Environment
 from . import customers, entitlements
 
 
@@ -11,10 +12,12 @@ def grant_entitlement_from_export(
     api_key: str,
     file_path: PathLike,
     entitlement_id: str,
-    end_time_ms: int | None = None,
-    user_id_field: str = "app_user_id",
-    environment: str = "production",
-    seconds_per_request: int = 1,
+    end_time: datetime | None,
+    duration: Duration | None,
+    start_time: datetime | None,
+    user_id_field: str,
+    environment: Environment,
+    seconds_per_request: int,
 ) -> bool:
     """
     Grant an entitlement to a customer from a RevenueCat export file.
@@ -44,7 +47,13 @@ def grant_entitlement_from_export(
                         continue
 
                 entitlements.grant(
-                    api_key, user_id, entitlement_id, end_time_ms, environment
+                    api_key,
+                    user_id,
+                    entitlement_id,
+                    end_time,
+                    duration,
+                    start_time,
+                    environment,
                 )
                 print(f"\nGranted entitlement {entitlement_id} to customer {user_id}")
                 time.sleep(seconds_per_request)

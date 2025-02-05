@@ -1,7 +1,21 @@
+from datetime import datetime
 from enum import Enum
 from typing import Dict
 
 import requests
+
+
+class Duration(str, Enum):
+    DAILY = "daily"
+    THREE_DAY = "three_day"
+    WEEKLY = "weekly"
+    TWO_WEEK = "two_week"
+    MONTHLY = "monthly"
+    TWO_MONTH = "two_month"
+    THREE_MONTH = "three_month"
+    SIX_MONTH = "six_month"
+    YEARLY = "yearly"
+    LIFETIME = "lifetime"
 
 
 class Environment(str, Enum):
@@ -47,3 +61,7 @@ def handle_response(
         return response_json[fields[0]]
 
     return {field: response_json[field] for field in fields}
+
+
+def datetime_to_ms(dt: datetime) -> int:
+    return int(dt.timestamp() * 1000)
