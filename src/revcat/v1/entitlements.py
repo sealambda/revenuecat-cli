@@ -1,13 +1,15 @@
-import requests
 from datetime import datetime
+
+import requests
+from requests.compat import quote
 
 from ..common import (
     API_ENDPOINTS,
     Duration,
     Environment,
+    datetime_to_ms,
     get_headers,
     handle_response,
-    datetime_to_ms,
 )
 
 
@@ -24,7 +26,11 @@ def grant(
     Grant a RevenueCat entitlement to a user.
     """
     base_url = API_ENDPOINTS["v1"][environment]
-    url = f"{base_url}/subscribers/{requests.utils.quote(user_id)}/entitlements/{requests.utils.quote(entitlement_id)}/promotional"
+    url = (
+        f"{base_url}/subscribers"
+        f"/{quote(user_id)}/entitlements"
+        f"/{quote(entitlement_id)}/promotional"
+    )
     data = {}
 
     if end_time is None:
@@ -50,7 +56,11 @@ def revoke(
     Revoke a RevenueCat entitlement from a user.
     """
     base_url = API_ENDPOINTS["v1"][environment]
-    url = f"{base_url}/subscribers/{requests.utils.quote(user_id)}/entitlements/{requests.utils.quote(entitlement_id)}/revoke_promotionals"
+    url = (
+        f"{base_url}/subscribers"
+        f"/{quote(user_id)}/entitlements"
+        f"/{quote(entitlement_id)}/revoke_promotionals"
+    )
     response = requests.post(url, headers=get_headers(api_key))
 
     return handle_response(response, [200], ["subscriber"])

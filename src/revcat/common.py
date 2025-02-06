@@ -1,6 +1,5 @@
 from datetime import datetime
 from enum import Enum
-from typing import Dict
 
 import requests
 
@@ -36,7 +35,7 @@ API_ENDPOINTS = {
 }
 
 
-def get_headers(api_key: str) -> Dict[str, str]:
+def get_headers(api_key: str) -> dict[str, str]:
     return {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
 
 
