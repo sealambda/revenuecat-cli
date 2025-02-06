@@ -1,28 +1,19 @@
-name: PR Verify
+name: Publish
 
 on:
   pull_request:
 
 jobs:
-  build_test:
-    name: Build and test
+  publish:
+    name: Publish to PyPI
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version:
-          - "3.9"
-          - "3.10"
-          - "3.11"
-          - "3.12"
-          - "3.13"
-
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
-        with:
-          python-version: ${{ matrix.python-version }}
 
       - name: Install the project
         run: uv sync --all-extras --dev
@@ -37,3 +28,10 @@ jobs:
 
       - name: Build
         run: uv build
+
+      # Configured to use trusted publishing: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
+      - name: Publish to PyPI
+        env:
+          UV_PUBLISH_URL: https://test.pypi.org/legacy/
+          UV_PUBLISH_CHECK_URL: https://test.pypi.org/simple/
+        run: uv publish
