@@ -28,3 +28,12 @@ feedback helps us improve!
 5. Open a pull request against the `main` branch of the original repository.
 6. Clearly describe the problem and solution in your pull request. Include the issue number if applicable.
 7. Wait for a review and address any feedback.
+
+## Release Process
+
+_for maintainers_
+
+1. Run `cz bump --no-verify` to bump the version.
+   We have to wait for https://github.com/commitizen-tools/commitizen/issues/1349 to solve the issue with `--no-verify`.
+2. Run `uv lock` to update the lock file - then amend the commit with `git commit --all --no-edit --amend`.
+3. Push the changes to the repository.
