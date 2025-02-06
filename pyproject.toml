@@ -1,5 +1,5 @@
 [project]
-name = "revenuecat-cli"
+name = "revcat"
 version = "0.1.0"
 description = "Unofficial RevenueCat CLI for Python"
 keywords = ["revenuecat", "cli"]
@@ -32,7 +32,7 @@ source = "https://github.com/sealambda/revenuecat-cli"
 issues = "https://github.com/sealambda/revenuecat-cli/issues"
 
 [project.scripts]
-revenuecat-cli = "revenuecat_cli.cli:app"
+revcat = "revcat.cli:app"
 
 [build-system]
 requires = ["hatchling"]

@@ -11,26 +11,26 @@ and automate more complex tasks such as granting entitlements to users.
 
 ```bash
 # to run the CLI straight away
-uvx revenuecat-cli --help
+uvx revcat --help
 
 # or if you prefer to install it
-uv tool install revenuecat-cli
+uv tool install revcat
 ```
 
 You may of course also use `pip` to install the CLI - or `pipx` if you prefer to install it in an isolated environment.
 
 ```bash
-pipx install revenuecat-cli
+pipx install revcat
 
 # ...or if you like to live on the edge
-pip install revenuecat-cli
+pip install revcat
 ```
 
 ## :hammer: Usage
 
 ```bash
 export REVENUECAT_API_KEY=<api-key>
-revenuecat-cli v1 entitlements grant --user-id <user-id> --entitlement-id <entitlement-id>
+revcat v1 entitlements grant --user-id <user-id> --entitlement-id <entitlement-id>
 ```
 
 ## :computer: Contributing

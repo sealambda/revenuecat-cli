@@ -1,11 +1,11 @@
-# CLI
+# revcat CLI usage
 
 RevenueCat CLI
 
 **Usage**:
 
 ```console
-$ [OPTIONS] COMMAND [ARGS]...
+$ revcat [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -18,14 +18,14 @@ $ [OPTIONS] COMMAND [ARGS]...
 
 * `v1`: API v1
 
-## `v1`
+## `revcat v1`
 
 API v1
 
 **Usage**:
 
 ```console
-$ v1 [OPTIONS] COMMAND [ARGS]...
+$ revcat v1 [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -37,14 +37,14 @@ $ v1 [OPTIONS] COMMAND [ARGS]...
 * `customers`: Manage customers
 * `entitlements`: Manage entitlements
 
-### `v1 customers`
+### `revcat v1 customers`
 
 Manage customers
 
 **Usage**:
 
 ```console
-$ v1 customers [OPTIONS] COMMAND [ARGS]...
+$ revcat v1 customers [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -56,14 +56,14 @@ $ v1 customers [OPTIONS] COMMAND [ARGS]...
 * `get`: Gets the latest Customer Info for the...
 * `delete`: Deletes a Customer.
 
-#### `v1 customers get`
+#### `revcat v1 customers get`
 
 Gets the latest Customer Info for the customer with the given App User ID, or creates a new customer if it doesn&#x27;t exist.
 
 **Usage**:
 
 ```console
-$ v1 customers get [OPTIONS]
+$ revcat v1 customers get [OPTIONS]
 ```
 
 **Options**:
@@ -73,14 +73,14 @@ $ v1 customers get [OPTIONS]
 * `--environment [production|sandbox]`: The environment to use.  [env var: REVENUECAT_ENVIRONMENT; default: production]
 * `--help`: Show this message and exit.
 
-#### `v1 customers delete`
+#### `revcat v1 customers delete`
 
 Deletes a Customer.
 
 **Usage**:
 
 ```console
-$ v1 customers delete [OPTIONS]
+$ revcat v1 customers delete [OPTIONS]
 ```
 
 **Options**:
@@ -90,14 +90,14 @@ $ v1 customers delete [OPTIONS]
 * `--environment [production|sandbox]`: The environment to use.  [env var: REVENUECAT_ENVIRONMENT; default: production]
 * `--help`: Show this message and exit.
 
-### `v1 entitlements`
+### `revcat v1 entitlements`
 
 Manage entitlements
 
 **Usage**:
 
 ```console
-$ v1 entitlements [OPTIONS] COMMAND [ARGS]...
+$ revcat v1 entitlements [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -110,14 +110,14 @@ $ v1 entitlements [OPTIONS] COMMAND [ARGS]...
 * `revoke`: Revokes a Customer&#x27;s entitlement.
 * `grant-from-export`: Grants entitlements to customers from a...
 
-#### `v1 entitlements grant`
+#### `revcat v1 entitlements grant`
 
 Grants a Customer an entitlement. Does not override or defer a store transaction, applied simultaneously.
 
 **Usage**:
 
 ```console
-$ v1 entitlements grant [OPTIONS]
+$ revcat v1 entitlements grant [OPTIONS]
 ```
 
 **Options**:
@@ -131,14 +131,14 @@ $ v1 entitlements grant [OPTIONS]
 * `--environment [production|sandbox]`: The environment to use.  [env var: REVENUECAT_ENVIRONMENT; default: production]
 * `--help`: Show this message and exit.
 
-#### `v1 entitlements revoke`
+#### `revcat v1 entitlements revoke`
 
 Revokes a Customer&#x27;s entitlement.
 
 **Usage**:
 
 ```console
-$ v1 entitlements revoke [OPTIONS]
+$ revcat v1 entitlements revoke [OPTIONS]
 ```
 
 **Options**:
@@ -149,14 +149,14 @@ $ v1 entitlements revoke [OPTIONS]
 * `--environment [production|sandbox]`: The environment to use.  [env var: REVENUECAT_ENVIRONMENT; default: production]
 * `--help`: Show this message and exit.
 
-#### `v1 entitlements grant-from-export`
+#### `revcat v1 entitlements grant-from-export`
 
 Grants entitlements to customers from a CSV file.
 
 **Usage**:
 
 ```console
-$ v1 entitlements grant-from-export [OPTIONS]
+$ revcat v1 entitlements grant-from-export [OPTIONS]
 ```
 
 **Options**:
