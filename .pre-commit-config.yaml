@@ -13,6 +13,5 @@ repos:
     rev: v4.1.1
   - hooks:
       - id: uv-lock
-      - id: uv-export
     repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.5.29
