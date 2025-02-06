@@ -1,8 +1,8 @@
 from datetime import datetime
 from pathlib import Path
+from typing import Annotated, Optional
 
 from typer import BadParameter, Option, Typer
-from typing_extensions import Annotated, Optional
 
 from .common import Duration, Environment
 from .v1 import customers, entitlements, extensions
@@ -15,7 +15,7 @@ app.add_typer(v1_app, name="v1", no_args_is_help=True)
 customers_app = Typer(help="Manage customers", no_args_is_help=True)
 v1_app.add_typer(customers_app, name="customers")
 
-entitlements_app = Typer(help="Manage entitlements")
+entitlements_app = Typer(help="Manage entitlements", no_args_is_help=True)
 v1_app.add_typer(entitlements_app, name="entitlements")
 
 
@@ -26,7 +26,8 @@ OptUserId = Annotated[
     str,
     Option(
         envvar="REVENUECAT_USER_ID",
-        help="The App User ID of the Customer. Wrap in single quotes to ensure all characters such as $ are not dropped.",
+        help="The App User ID of the Customer. "
+        "Wrap in single quotes to ensure all characters such as $ are not dropped.",
     ),
 ]
 OptEnvironment = Annotated[
@@ -65,7 +66,8 @@ def get_customer(
     environment: OptEnvironment = Environment.production,
 ):
     """
-    Gets the latest Customer Info for the customer with the given App User ID, or creates a new customer if it doesn't exist.
+    Gets the latest Customer Info for the customer with the given App User ID,
+    or creates a new customer if it doesn't exist.
     """
     print("Starting customer retrieval process...")
 
@@ -108,7 +110,8 @@ def grant_entitlement(
     environment: OptEnvironment = Environment.production,
 ):
     """
-    Grants a Customer an entitlement. Does not override or defer a store transaction, applied simultaneously.
+    Grants a Customer an entitlement.
+    Does not override or defer a store transaction, applied simultaneously.
     """
     if not end_time and not duration:
         raise BadParameter("Either end_time or duration must be provided")
@@ -134,7 +137,7 @@ def revoke_entitlement(
     entitlement_id: Annotated[
         str,
         Option(
-            help="The identifier for the entitlement you want to revoke from the Customer",
+            help="The identifier for the entitlement to revoke from the Customer",
         ),
     ],
     environment: OptEnvironment = Environment.production,

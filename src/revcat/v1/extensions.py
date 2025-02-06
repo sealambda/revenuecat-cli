@@ -2,6 +2,7 @@ import csv
 import time
 from datetime import datetime
 from os import PathLike
+
 from typer import progressbar
 
 from ..common import Duration, Environment
@@ -22,7 +23,7 @@ def grant_entitlement_from_export(
     """
     Grant an entitlement to a customer from a RevenueCat export file.
     """
-    with open(file_path, "r") as csvfile:
+    with open(file_path) as csvfile:
         reader = csv.DictReader(csvfile, delimiter=";")
         rows = list(reader)
         with progressbar(rows) as progress:
@@ -41,7 +42,8 @@ def grant_entitlement_from_export(
                     )
                     if expires_date > datetime.now():
                         print(
-                            f"\nCustomer {user_id} already has the entitlement {entitlement_id}"
+                            f"\nCustomer {user_id} already "
+                            f"has the entitlement {entitlement_id}"
                         )
                         time.sleep(seconds_per_request)
                         continue
