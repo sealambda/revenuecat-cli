@@ -1,6 +1,6 @@
 [project]
 name = "revcat"
-version = "0.1.5"
+version = "0.1.6"
 description = "Unofficial RevenueCat CLI for Python"
 keywords = ["revenuecat", "cli"]
 classifiers = [
@@ -48,6 +48,7 @@ dev = [
 [tool.commitizen]
 name = "cz_conventional_commits"
 tag_format = "v$version"
+annotated_tags = true
 version_scheme = "pep440"
 version_provider = "pep621"
 update_changelog_on_bump = true
