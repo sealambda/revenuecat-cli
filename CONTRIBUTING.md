@@ -1,12 +1,14 @@
 # Contributing
 
-Hey there! Thanks for thinking about contributing to revenuecat-cli! We appreciate all kinds of help, whether it's fixing bugs, adding new features, or improving our documentation.
+Hey there! Thanks for thinking about contributing to the revcat CLI for RevenueCat!
+We appreciate all kinds of help, whether it's fixing bugs, adding new features, or improving our documentation.
 
 This guide will help you get started.
 
 ## Reporting Issues
 
-Found a bug? Please let us know by [submitting an issue](https://github.com/sealambda/revenuecat-cli/issues/new). Your feedback helps us improve!
+Found a bug? Please let us know by [submitting an issue](https://github.com/sealambda/revenuecat-cli/issues/new). Your
+feedback helps us improve!
 
 ### Setting up your development environment
 
@@ -14,7 +16,7 @@ Found a bug? Please let us know by [submitting an issue](https://github.com/seal
 2. Make sure you follow our blog post on [how to install uv](https://sealambda.com/blog/hygienic-python-in-2025).
 3. Run the CLI:
    ```sh
-   uv run revenuecat-cli --help
+   uv run revcat --help
    ```
 
 ### Submitting a Pull Request

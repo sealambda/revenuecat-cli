@@ -1,5 +1,5 @@
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 from typer import BadParameter, Option, Typer
 from typing_extensions import Annotated, Optional
@@ -7,12 +7,12 @@ from typing_extensions import Annotated, Optional
 from .common import Duration, Environment
 from .v1 import customers, entitlements, extensions
 
-app = Typer(help="RevenueCat CLI")
+app = Typer(help="RevenueCat CLI", no_args_is_help=True)
 
-v1_app = Typer(help="API v1")
-app.add_typer(v1_app, name="v1")
+v1_app = Typer(help="API v1", no_args_is_help=True)
+app.add_typer(v1_app, name="v1", no_args_is_help=True)
 
-customers_app = Typer(help="Manage customers")
+customers_app = Typer(help="Manage customers", no_args_is_help=True)
 v1_app.add_typer(customers_app, name="customers")
 
 entitlements_app = Typer(help="Manage entitlements")
