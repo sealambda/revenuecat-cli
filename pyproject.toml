@@ -1,6 +1,6 @@
 [project]
 name = "revcat"
-version = "0.1.0"
+version = "0.1.1"
 description = "Unofficial RevenueCat CLI for Python"
 keywords = ["revenuecat", "cli"]
 classifiers = [
