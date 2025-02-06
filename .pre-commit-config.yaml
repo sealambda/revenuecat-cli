@@ -1,16 +1,18 @@
-# https://docs.astral.sh/uv/guides/integration/pre-commit/
 repos:
-  - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.5.28
-    hooks:
-      # Update uv.lock
-      - id: uv-lock    
-      # Export requirements.txt
-      - id: uv-export  
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.4
-    hooks:
-      # Run the linter.
+  - hooks:
       - id: ruff
-      # Run the formatter.
       - id: ruff-format
+    repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.4
+  - hooks:
+      - id: commitizen
+      - id: commitizen-branch
+        stages:
+          - pre-push
+    repo: https://github.com/commitizen-tools/commitizen
+    rev: v4.1.1
+  - hooks:
+      - id: uv-lock
+      - id: uv-export
+    repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.5.28
