@@ -1,3 +1,14 @@
+## v0.1.5 (2025-02-06)
+
+### Fix
+
+- remove annotated tag config
+
+### Refactor
+
+- missing linter rules
+- rename CLI to revcat
+
 ## v0.1.4 (2025-02-06)
 
 ## v0.1.3 (2025-02-06)
