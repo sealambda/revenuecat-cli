@@ -1,9 +1,22 @@
-# RevenueCat CLI
+<h1 align="center">revcat</h1>
+<h3 align="center">Unofficial RevenueCat CLI for weird but necessary use cases</h2>
 
-Unofficial RevenueCat CLI for Python.
+<p align="center">
+    <a  href="https://pypi.org/project/revcat/">
+        <img alt="CI" src="https://img.shields.io/pypi/v/revcat.svg?style=flat-round&logo=pypi&logoColor=white">
+    </a>
+</p>
 
-It allows you to interact with the RevenueCat API from the command line,
-and automate more complex tasks such as granting entitlements to users.
+**revcat** lets you interact with the RevenueCat API from the command line, but that’s not really the main reason it exists.
+
+You could do that with curl or any other HTTP client—if you enjoy writing long, unreadable commands and questioning your life choices.
+
+The real reason for revcat is to handle the weird but necessary use cases that RevenueCat doesn’t support out of the box. One of those?
+Granting entitlements to a huge list of users via a CSV file.
+
+In our case, we wanted to grant an early-adopter entitlement to users who signed up before we introduced the paywall. The idea was simple:
+they had been using certain features for free, and even though some of those features later became PRO, we wanted to let them keep access
+as a thank-you for being there from the start—and let’s be honest, also to prevent a huge spike in our churn rate 🙂.
 
 ## ⚙️ Installation
 
